@@ -1,0 +1,49 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+    id 'java'
+    id 'com.gradleup.shadow' version '8.3.5'
+}
+
+group = 'me.ultimategamer200.ultracolor'
+version = '1.6.8'
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+    maven { url = 'https://oss.sonatype.org/content/groups/public/' }
+    maven { url = 'https://jitpack.io' }
+    maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
+
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT'
+
+    implementation('com.github.kangarko:Foundation:6.9.16') {
+        exclude group: 'org.mineacademy.plugin'
+    }
+    compileOnly fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly 'me.clip:placeholderapi:2.11.6'
+    annotationProcessor 'org.projectlombok:lombok:1.18.36'
+    compileOnly 'org.apache.logging.log4j:log4j-spring-cloud-config-client:2.20.0'
+}
+
+jar {
+    enabled = false
+}
+
+shadowJar {
+    archiveFileName = "${project.name}-${project.version}.jar"
+    relocate 'org.mineacademy.fo', 'me.ultimategamer200.ultracolor.lib'
+    exclude('')
+    minimize()
+}
+
+processResources {
+    filter(ReplaceTokens, tokens: [version: version])
+}
+
+assemble {
+    dependsOn shadowJar
+}

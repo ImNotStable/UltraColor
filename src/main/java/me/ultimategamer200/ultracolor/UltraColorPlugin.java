@@ -51,7 +51,7 @@ public class UltraColorPlugin extends SimplePlugin {
 				Common.log("Detected server using Java 15+ without NashornPlus plugin!",
 						"Please install NashornPlus plugin from bitbucket.org/kangarko/nashornplus/downloads/",
 						"Disabling plugin to be on the safe side!");
-				getPluginLoader().disablePlugin(this);
+				Bukkit.getPluginManager().disablePlugin(this);
 				return;
 			}
 		}

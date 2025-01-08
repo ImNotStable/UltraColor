@@ -29,7 +29,7 @@ public class UltraColorUtil {
 	 * @param format the name color identifier
 	 * @return the chat color format as a string
 	 */
-	public String nameFormatToString(final ChatColor format) {
+	public static String nameFormatToString(final ChatColor format) {
 		if (format.isFormat()) return "§" + format.getChar();
 		return "";
 	}
@@ -40,7 +40,7 @@ public class UltraColorUtil {
 	 * @param format the name color identifier
 	 * @return the chat color format as a string
 	 */
-	public String chatFormatToString(final CompChatColor format) {
+	public static String chatFormatToString(final CompChatColor format) {
 		if (CompChatColor.getDecorations().contains(format)) return "§" + format.getCode();
 		return "";
 	}
@@ -51,7 +51,7 @@ public class UltraColorUtil {
 	 * @param nameOrChatColor the name color identifier
 	 * @return the name/chat color format as a string
 	 */
-	public String nameAndChatColorToString(final CompChatColor nameOrChatColor) {
+	public static String nameAndChatColorToString(final CompChatColor nameOrChatColor) {
 		// This condition takes into account if the color is a hex or gradient.
 		// If this is false, the color is a regular color that's neither a hex nor gradient.
 		if (nameOrChatColor.toString().contains("§")) return nameOrChatColor.toString();
@@ -63,7 +63,7 @@ public class UltraColorUtil {
 	 *
 	 * @param player the player to have rainbow colors.
 	 */
-	public void convertNameToRainbow(final Player player, final boolean formatEnabled, final String format) {
+	public static void convertNameToRainbow(final Player player, final boolean formatEnabled, final String format) {
 		final String displayName;
 		final PlayerCache pCache = PlayerCache.fromPlayer(player);
 		pCache.setNameColor(null);
@@ -90,7 +90,7 @@ public class UltraColorUtil {
 	 * @param player the player to apply the color.
 	 * @param color  the color to apply.
 	 */
-	public void applyChatColor(final OfflinePlayer player, final CompChatColor color) {
+	public static void applyChatColor(final OfflinePlayer player, final CompChatColor color) {
 		final PlayerCache pCache = PlayerCache.fromOfflinePlayer(player);
 		pCache.setChatColor(color);
 
@@ -106,7 +106,7 @@ public class UltraColorUtil {
 	 * @param player the player to apply the format.
 	 * @param format the format to apply.
 	 */
-	public void applyChatFormat(final OfflinePlayer player, final CompChatColor format) {
+	public static void applyChatFormat(final OfflinePlayer player, final CompChatColor format) {
 		final PlayerCache pCache = PlayerCache.fromOfflinePlayer(player);
 
 		if (pCache.getCustomGradientOne() != null || pCache.getChatCustomGradientTwo() != null)
@@ -121,7 +121,7 @@ public class UltraColorUtil {
 	 * @param color  the color to apply.
 	 * @param format the format to apply or null if none.
 	 */
-	public void applyNameColor(final Player player, final CompChatColor color, final ChatColor format) {
+	public static void applyNameColor(final Player player, final CompChatColor color, final ChatColor format) {
 		final PlayerCache pCache = PlayerCache.fromPlayer(player);
 
 		if (color != null) pCache.setNameColor(color);
@@ -167,7 +167,7 @@ public class UltraColorUtil {
 	 * @param type   the pre-gradient to use.
 	 * @param format the format to apply.
 	 */
-	public void applyFormatToGradient(final OfflinePlayer player, final String type, final ChatColor format) {
+	public static void applyFormatToGradient(final OfflinePlayer player, final String type, final ChatColor format) {
 		final PlayerCache pCache = PlayerCache.fromOfflinePlayer(player);
 
 		if (format.isFormat()) {
@@ -199,7 +199,7 @@ public class UltraColorUtil {
 	 * @param message the message to have rainbow colors.
 	 * @return the rainbow message
 	 */
-	public String convertStringToRainbow(final String message, final boolean formatEnabled, final String format) {
+	public static String convertStringToRainbow(final String message, final boolean formatEnabled, final String format) {
 		StringBuilder result = new StringBuilder();
 		int stringSize = message.length();
 		int colorCount = 0;
@@ -227,7 +227,7 @@ public class UltraColorUtil {
 	 * @param color     the color to get the preview of.
 	 * @param gradients the gradient to use for the preview if the color is a gradient.
 	 */
-	public List<String> modifyColorLoreWithPreview(final List<String> lore, final String color, final List<String> gradients) {
+	public static List<String> modifyColorLoreWithPreview(final List<String> lore, final String color, final List<String> gradients) {
 		final List<String> modifiedLore = new ArrayList<>();
 		final String colorPreviewPlaceholder = "{color_preview}";
 
@@ -260,7 +260,7 @@ public class UltraColorUtil {
 	 * @param lore     the lore for the item.
 	 * @return an ItemStack of the specified material, name, and lore.
 	 */
-	public ItemStack makeMenuItem(final String material, final String name, final List<String> lore) {
+	public static ItemStack makeMenuItem(final String material, final String name, final List<String> lore) {
 		if (material.startsWith("PLAYER_HEAD:")) {
 			final String textureLink = material.substring(12);
 			final ItemStack head = SkullCreator.itemFromUrl(textureLink);
@@ -276,7 +276,7 @@ public class UltraColorUtil {
 	 * @param selectedFormat the format to convert.
 	 * @return the CompChatColor of the specified format.
 	 */
-	public CompChatColor getFormatToCompChatColor(final String selectedFormat) {
+	public static CompChatColor getFormatToCompChatColor(final String selectedFormat) {
 		for (final CompChatColor decoration : CompChatColor.getDecorations())
 			if (decoration.getName().equalsIgnoreCase(selectedFormat)) return decoration;
 		return null;
@@ -288,7 +288,7 @@ public class UltraColorUtil {
 	 * @param selectedFormat the format to convert.
 	 * @return the ChatColor of the specified format.
 	 */
-	public ChatColor getNameFormatToChatColor(final String selectedFormat) {
+	public static ChatColor getNameFormatToChatColor(final String selectedFormat) {
 		for (final ChatColor color : ChatColor.values()) {
 			if (!color.isFormat()) continue;
 			if (color.name().equalsIgnoreCase(selectedFormat)) return color;
@@ -300,7 +300,7 @@ public class UltraColorUtil {
 	/**
 	 * Gets all the nicknames uncolored.
 	 */
-	public Set<String> getNickNamesUnColored() {
+	public static Set<String> getNickNamesUnColored() {
 		final Set<String> nickNames = new HashSet<>();
 
 		for (final PlayerCache pCache : PlayerCache.cacheMap.values())
@@ -312,7 +312,7 @@ public class UltraColorUtil {
 	/**
 	 * Is the specified color able to be selected?
 	 */
-	public boolean isColorSelectedAbleToBeSet(final String type, final String color, final Player player) {
+	public static boolean isColorSelectedAbleToBeSet(final String type, final String color, final Player player) {
 		String permissionStarter;
 
 		if (type.equalsIgnoreCase("name")) permissionStarter = UltraColorPermissions.NAME_COLOR;
@@ -335,7 +335,7 @@ public class UltraColorUtil {
 	/**
 	 * Is the specified format able to be selected?
 	 */
-	public boolean isFormatSelectedAbleToBeSet(final String type, final String format, final Player player) {
+	public static boolean isFormatSelectedAbleToBeSet(final String type, final String format, final Player player) {
 		String permissionStarter;
 
 		if (type.equalsIgnoreCase("name")) permissionStarter = UltraColorPermissions.Color.NAME_FORMAT;
@@ -355,7 +355,7 @@ public class UltraColorUtil {
 	/**
 	 * Is the specified name color enabled?
 	 */
-	public boolean isNameColorEnabled(final String color) {
+	public static boolean isNameColorEnabled(final String color) {
 		if (color.equalsIgnoreCase(ColorId.BLACK.getId()))
 			return Settings.Color_Settings_Name_Colors.BLACK_COLOR_ENABLED;
 		else if (color.equalsIgnoreCase(ColorId.DARK_BLUE.getId()))
@@ -397,7 +397,7 @@ public class UltraColorUtil {
 	/**
 	 * Is the specified name format enabled?
 	 */
-	public boolean isNameFormatEnabled(final String format) {
+	public static boolean isNameFormatEnabled(final String format) {
 		if (format.equalsIgnoreCase(ColorId.FormatId.BOLD.getId()))
 			return Settings.Color_Settings_Name_Formats.BOLD_FORMAT;
 		else if (format.equalsIgnoreCase(ColorId.FormatId.ITALIC.getId()))
@@ -414,7 +414,7 @@ public class UltraColorUtil {
 	/**
 	 * Is the specified chat format enabled?
 	 */
-	public boolean isChatFormatEnabled(final String format) {
+	public static boolean isChatFormatEnabled(final String format) {
 		if (format.equalsIgnoreCase(ColorId.FormatId.BOLD.getId()))
 			return Settings.Color_Settings_Chat_Formats.BOLD_FORMAT;
 		else if (format.equalsIgnoreCase(ColorId.FormatId.ITALIC.getId()))
@@ -431,7 +431,7 @@ public class UltraColorUtil {
 	/**
 	 * Is the specified chat color enabled?
 	 */
-	public boolean isChatColorEnabled(final String color) {
+	public static boolean isChatColorEnabled(final String color) {
 		if (color.equalsIgnoreCase(ColorId.BLACK.getId()))
 			return Settings.Color_Settings_Chat_Colors.BLACK_COLOR_ENABLED;
 		else if (color.equalsIgnoreCase(ColorId.DARK_BLUE.getId()))
@@ -470,7 +470,7 @@ public class UltraColorUtil {
 			return color.equalsIgnoreCase("none");
 	}
 
-	public boolean isAtLeastOneFormatEnabled(final String formatType) {
+	public static boolean isAtLeastOneFormatEnabled(final String formatType) {
 		for (final CompChatColor color : CompChatColor.getDecorations()) {
 			if (formatType.equalsIgnoreCase("name")) {
 				if (isNameFormatEnabled(color.getName())) return true;
@@ -482,7 +482,7 @@ public class UltraColorUtil {
 	/**
 	 * Is the specified hex valid?
 	 */
-	public boolean isHexValid(final String hex) {
+	public static boolean isHexValid(final String hex) {
 		if (hex.length() == 6 && hex.startsWith("#")) return true;
 
 		return hex.startsWith("#") && hex.length() == 7;
@@ -493,7 +493,7 @@ public class UltraColorUtil {
 	 *
 	 * @return If one of the hexes is not valid, return false. Otherwise, return true.
 	 */
-	public boolean areHexesValid(final List<String> hexes) {
+	public static boolean areHexesValid(final List<String> hexes) {
 		for (final String hex : hexes) if (!isHexValid(hex)) return false;
 		return true;
 	}
@@ -501,7 +501,7 @@ public class UltraColorUtil {
 	/**
 	 * Gets the specified player's name coloring.
 	 */
-	public String getPlayerNameInColor(final Player player) {
+	public static String getPlayerNameInColor(final Player player) {
 		final PlayerCache pCache = PlayerCache.fromPlayer(player);
 		final String playerName = player.getName();
 		final ChatColor nameFormat = pCache.getNameFormat();
