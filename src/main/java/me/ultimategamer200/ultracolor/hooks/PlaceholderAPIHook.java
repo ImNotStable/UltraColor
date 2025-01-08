@@ -38,37 +38,45 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
 		final ChatColor nameFormat = pCache.getNameFormat();
 		final String format = nameFormat != null ? nameFormat.name() : "";
 
-		if (identifier.equals("chat_color")) return colorizeColorPlaceholder(pCache, "chat");
-		if (identifier.equals("name_color")) return colorizeColorPlaceholder(pCache, "name");
-		if (identifier.equals("chat_color_name")) return colorizeColorNamePlaceholder(pCache, "chat");
-		if (identifier.equals("name_color_name")) return colorizeColorNamePlaceholder(pCache, "name");
+    switch (identifier) {
+      case "chat_color" -> {
+        return colorizeColorPlaceholder(pCache, "chat");
+      }
+      case "name_color" -> {
+        return colorizeColorPlaceholder(pCache, "name");
+      }
+      case "chat_color_name" -> {
+        return colorizeColorNamePlaceholder(pCache, "chat");
+      }
+      case "name_color_name" -> {
+        return colorizeColorNamePlaceholder(pCache, "name");
+      }
+      case "nickname" -> {
+        if (!pCache.getNickName().equalsIgnoreCase("none")) return pCache.getNickName();
+        else return playerName;
+      }
+      case "colored_nickname" -> {
+        if (!pCache.getColoredNickName().equalsIgnoreCase("none"))
+          return pCache.getColoredNickName();
+        else {
+          if (pCache.isNameRainbowColors())
+            return UltraColorUtil.convertStringToRainbow(playerName, nameFormat != null, format);
+          if (pCache.getCustomGradientOne() != null && pCache.getCustomGradientTwo() != null)
+            return ChatUtil.generateGradient(playerName, pCache.getCustomGradientOne(), pCache.getCustomGradientTwo());
 
-		if (identifier.equals("nickname")) {
-			if (!pCache.getNickName().equalsIgnoreCase("none")) return pCache.getNickName();
-			else return playerName;
-		}
+          if (pCache.getNameColor() != null || pCache.getNameFormat() != null) {
+            if (pCache.getNameColor() != null && pCache.getNameFormat() == null)
+              return pCache.getNameColor() + playerName;
+            else if (pCache.getNameColor() != null)
+              return pCache.getNameColor() + pCache.getNameFormat().toString() + playerName;
+          }
 
-		if (identifier.equals("colored_nickname")) {
-			if (!pCache.getColoredNickName().equalsIgnoreCase("none"))
-				return pCache.getColoredNickName();
-			else {
-				if (pCache.isNameRainbowColors())
-					return UltraColorUtil.convertStringToRainbow(playerName, nameFormat != null, format);
-				if (pCache.getCustomGradientOne() != null && pCache.getCustomGradientTwo() != null)
-					return ChatUtil.generateGradient(playerName, pCache.getCustomGradientOne(), pCache.getCustomGradientTwo());
+          return playerName;
+        }
+      }
+    }
 
-				if (pCache.getNameColor() != null || pCache.getNameFormat() != null) {
-					if (pCache.getNameColor() != null && pCache.getNameFormat() == null)
-						return pCache.getNameColor() + playerName;
-					else if (pCache.getNameColor() != null)
-						return pCache.getNameColor() + pCache.getNameFormat().toString() + playerName;
-				}
-
-				return playerName;
-			}
-		}
-
-		return null;
+    return null;
 	}
 
 	private String colorizeColorPlaceholder(final PlayerCache pCache, final String type) {

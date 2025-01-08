@@ -102,14 +102,8 @@ public final class UltraColorDatabase extends SimpleFlatDatabase<PlayerCache> {
 	public boolean isPlayerStored(final UUID uuid) throws SQLException {
 		if (uuid == null)
 			throw new NullPointerException("uuid is marked non-null but is null");
-		else {
-			ResultSet resultSet = selectUser(uuid);
-			if (resultSet == null)
-				return false;
-			else if (resultSet.next())
-				return resultSet.getString("UUID") != null;
-			else
-				return false;
+		try	(ResultSet resultSet = selectUser(uuid)) {
+			return resultSet.next();
 		}
 	}
 
@@ -123,9 +117,11 @@ public final class UltraColorDatabase extends SimpleFlatDatabase<PlayerCache> {
 	public OfflinePlayer getStoredPlayerByUUID(final UUID uuid) throws SQLException {
 		if (!isPlayerStored(uuid)) return null;
 
-		ResultSet resultSet = selectUser(uuid);
-		resultSet.next();
-		return Remain.getOfflinePlayerByUUID(UUID.fromString(resultSet.getString("UUID")));
+		try (ResultSet resultSet = selectUser(uuid)) {
+			if (resultSet.next())
+				return Remain.getOfflinePlayerByUUID(UUID.fromString(resultSet.getString("UUID")));
+		}
+		return null;
 	}
 
 	/**
@@ -135,8 +131,11 @@ public final class UltraColorDatabase extends SimpleFlatDatabase<PlayerCache> {
 		final UUID uuid = player.getUniqueId();
 		if (getStoredPlayerByUUID(uuid) == null) return "";
 
-		ResultSet resultSet = selectUser(uuid);
-		String dataRaw = resultSet.next() ? resultSet.getString("Data") : "{}";
+		String dataRaw;
+
+		try	(ResultSet resultSet = selectUser(uuid)) {
+			dataRaw = resultSet.next() ? resultSet.getString("Data") : "{}";
+		}
 		SerializedMap data = SerializedMap.fromJson(dataRaw);
 
 		return data.getString(DataField.COLORED_NICKNAME.getIdentifier(), "none");
@@ -154,7 +153,8 @@ public final class UltraColorDatabase extends SimpleFlatDatabase<PlayerCache> {
 		return Settings.Database.EXPIRY_DAYS;
 	}
 
-	@RequiredArgsConstructor
+	@Getter
+  @RequiredArgsConstructor
 	public enum DataField {
 		CHAT_COLOR("Chat_Color", CompChatColor.class),
 		NAME_COLOR("Name_Color", CompChatColor.class),
@@ -169,10 +169,7 @@ public final class UltraColorDatabase extends SimpleFlatDatabase<PlayerCache> {
 		NICKNAME("Nickname", String.class),
 		COLORED_NICKNAME("Colored_Nickname", String.class);
 
-		@Getter
 		private final String identifier;
-
-		@Getter
 		private final Class<?> dataFieldClass;
 	}
 }
